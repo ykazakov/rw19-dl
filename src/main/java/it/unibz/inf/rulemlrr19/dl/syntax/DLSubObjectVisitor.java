@@ -87,8 +87,7 @@ public class DLSubObjectVisitor implements DLObject.Visitor {
 
 	@Override
 	public void visit(DLIndividual individual) {
-		// TODO Auto-generated method stub
-
+		// no sub-objects
 	}
 
 }
