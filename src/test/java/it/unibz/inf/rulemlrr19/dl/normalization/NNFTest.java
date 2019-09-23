@@ -15,10 +15,12 @@ import it.unibz.inf.rulemlrr19.dl.syntax.DLRoleName;
 
 public class NNFTest {
 
+	/**
+	 * Tests that NNF((∃ r. A) ⊓ ¬ ((∃ r. A) ⊓ (¬ B))) = ((∃ r. A) ⊓ ((∀ r. (¬
+	 * A)) ⊔ B))
+	 */
 	@Test
 	public void testExample12() {
-		// NNF((∃ r. A) ⊓ ¬ ((∃ r. A) ⊓ (¬ B))) = ((∃ r. A) ⊓ ((∀ r. (¬ A)) ⊔
-		// B))
 		DLConcept given = new DLConceptConjunction(
 				new DLConceptExistentialRestiction(new DLRoleName("r"),
 						new DLConceptName("A")),

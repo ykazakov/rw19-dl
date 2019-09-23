@@ -19,10 +19,12 @@ import it.unibz.inf.rulemlrr19.dl.syntax.DLSignature;
 
 public class DLOntologyTest {
 
+	/**
+	 * Tests the ontology from Example 1 of
+	 * <a href="https://doi.org/10.1007/978-3-030-31423-1_1">the paper</a>.
+	 */
 	@Test
-	public void testExampleOntology() {
-		// Tests the ontology from Example 1 of the paper
-
+	public void testExample1() {
 		DLOntology o = new DLOntology();
 		// Human ⊑ (Dead ⊔ Alive)
 		o.add(new DLConceptInclusion(new DLConceptName("Human"),
