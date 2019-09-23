@@ -58,8 +58,8 @@ public class DLConceptTest {
 	@Test
 	public void testNotMaleAndHuman() {
 		// (¬ Male) ⊓ Human
-		DLConcept c = new DLConceptConjunction(new DLConceptNegation(male),
-				human);
+		DLConcept c = new DLConceptNegation(male);
+		c = new DLConceptConjunction(c, human);
 		// System.out.println(c);
 		DLSignature s = DLSignature.getSignatureOf(c);
 		assertEquals(2, s.conceptNames().count());

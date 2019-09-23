@@ -127,8 +127,8 @@ public class DLInterpretationTest {
 	@Test
 	@Ignore
 	public void testForallHasChildParent() {
-		// ∀ hasChild.Parent = {a}
-		assertEquals(new HashSet<>(Arrays.asList("a")),
+		// ∀ hasChild.Parent = {a,c}
+		assertEquals(new HashSet<>(Arrays.asList("a", "c")),
 				intp.interpret(new DLConceptUniversalRestiction(
 						new DLRoleName("hasChild"),
 						new DLConceptName("Parent"))));
@@ -138,7 +138,7 @@ public class DLInterpretationTest {
 	@Ignore
 	public void testForallHasChildGrandParent() {
 		// ∀ hasChild.GrandParent = {c}
-		assertEquals(new HashSet<>(Arrays.asList("a")),
+		assertEquals(new HashSet<>(Arrays.asList("c")),
 				intp.interpret(new DLConceptUniversalRestiction(
 						new DLRoleName("hasChild"),
 						new DLConceptName("GrandParent"))));
