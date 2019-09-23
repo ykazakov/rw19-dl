@@ -8,6 +8,7 @@ See the [proceeding paper](https://doi.org/10.1007/978-3-030-31423-1_1) for the 
 Please install the following tools for the Hackathon:
 1. Java Development Kit (version 8 or higher). Can be obtained from [Oracle](https://www.oracle.com/technetwork/java/javase/downloads) or [OpenJDK](https://openjdk.java.net/install/)
 2. Eclipse IDE. Please [download](https://www.eclipse.org/downloads/) Eclipse IDE for Java Developers (we will need Java IDE, a Git client, and Maven integaration).
+3. [Apache Maven](https://maven.apache.org/) version 3.1.0 or above.
 
 ## Checkout the Source Code
 Follow the following steps to install the code locally:
