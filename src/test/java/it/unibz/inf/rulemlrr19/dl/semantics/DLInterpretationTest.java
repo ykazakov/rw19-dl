@@ -164,7 +164,7 @@ public class DLInterpretationTest {
 	}
 
 	@Test
-	public void testParentSubsumeGrandParent() {
+	public void testParentIsGrandParent() {
 		assertFalse(intp
 				.interpret(new DLConceptInclusion(new DLConceptName("Parent"),
 						new DLConceptName("GrandParent"))));
