@@ -75,10 +75,11 @@ public class DLConceptTest {
 		assertEquals(1, s.roleNames().count());
 	}
 
+	@Test
 	public void testForAllHasChildFemale() {
 		// ∀ hasChild. Female
 		DLConcept c = new DLConceptUniversalRestiction(hasChild, female);
-		System.out.println(c);
+		// System.out.println(c);
 		DLSignature s = DLSignature.getSignatureOf(c);
 		assertEquals(1, s.conceptNames().count());
 		assertEquals(1, s.roleNames().count());
@@ -90,7 +91,7 @@ public class DLConceptTest {
 		DLConcept c = new DLConceptConjunction(male,
 				new DLConceptUniversalRestiction(hasChild,
 						new DLConceptNegation(male)));
-		System.out.println(c);
+		// System.out.println(c);
 		DLSignature s = DLSignature.getSignatureOf(c);
 		assertEquals(1, s.conceptNames().count());
 		assertEquals(1, s.roleNames().count());
