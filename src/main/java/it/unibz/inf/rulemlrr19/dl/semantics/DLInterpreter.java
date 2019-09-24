@@ -24,12 +24,13 @@ import it.unibz.inf.rulemlrr19.dl.syntax.DLRoleAssertion;
 import it.unibz.inf.rulemlrr19.dl.syntax.DLRoleName;
 
 /**
- * Evaluates interpretation on complex {@link DLObject}s
+ * Evaluates interpretation on complex {@link DLObject}s. See Table 1 of
+ * <a href="https://doi.org/10.1007/978-3-030-31423-1_1">the paper</a>.
  * 
  * @author Yevgeny Kazakov
  *
  * @param <D>
- *                the type of elements in the interpretation
+ *                the type of domain elements of the interpretation
  */
 public class DLInterpreter<D> implements DLObject.Visitor {
 
