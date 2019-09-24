@@ -98,14 +98,15 @@ class DLTableauExpander {
 			while (!modificationHistory_.isEmpty()) {
 				DLTableauModification mod = modificationHistory_.peek();
 				if (mod.getTimeStamp() >= time_) {
-					tableau_.revert(mod);
 					modificationHistory_.pop();
+					tableau_.revert(mod);
 				} else {
 					break;
 				}
 			}
 			if (lastRule instanceof DLTableauDisjunctionFirstRuleApplication) {
 				DLTableauDisjunctionFirstRuleApplication rule = (DLTableauDisjunctionFirstRuleApplication) lastRule;
+				// try the alternative rule application
 				DLTableauDisjunctionSecondRuleApplication alternative = new DLTableauDisjunctionSecondRuleApplication(
 						tableau_, rule.getNode(), rule.getConcept());
 				todo(alternative);
@@ -149,6 +150,8 @@ class DLTableauExpander {
 				// a universal rule potentially can be applied to universal
 				// restrictions
 				for (DLConcept c : tableau_.getNodeLabels(mod.getNodeFrom())) {
+					// we are only interested in universal restrictions in the
+					// label
 					c.accept(new DLObjectDummyVisitor() {
 						@Override
 						public void visit(
@@ -164,14 +167,9 @@ class DLTableauExpander {
 
 			@Override
 			public void visit(DLTableauNodeLabelAddition mod) {
-				// check potential rule applications
+				// check potential rule applications depending on the type of
+				// the label
 				mod.getLabel().accept(new DLConcept.Visitor() {
-
-					@Override
-					public void visit(DLConceptUniversalRestiction concept) {
-						todo(new DLTableauUniversalRuleApplication(tableau_,
-								mod.getNode(), concept));
-					}
 
 					@Override
 					public void visit(DLConceptTop concept) {
@@ -179,26 +177,13 @@ class DLTableauExpander {
 					}
 
 					@Override
-					public void visit(DLConceptNegation concept) {
-						todo(new DLTableauClashRuleApplication(tableau_,
-								mod.getNode(), concept));
+					public void visit(DLConceptBottom concept) {
+						// nothing to apply
 					}
 
 					@Override
-					public void visit(DLConceptName concept) {
-						// potential clash rule application
-						DLConceptNegation negated = new DLConceptNegation(
-								concept);
-						if (tableau_.getNodeLabels(mod.getNode())
-								.contains(negated)) {
-							todo(new DLTableauClashRuleApplication(tableau_,
-									mod.getNode(), negated));
-						}
-					}
-
-					@Override
-					public void visit(DLConceptExistentialRestiction concept) {
-						todo(new DLTableauExistentialRuleApplication(tableau_,
+					public void visit(DLConceptConjunction concept) {
+						todo(new DLTableauConjunctionRuleApplication(tableau_,
 								mod.getNode(), concept));
 					}
 
@@ -210,15 +195,30 @@ class DLTableauExpander {
 					}
 
 					@Override
-					public void visit(DLConceptConjunction concept) {
-						todo(new DLTableauConjunctionRuleApplication(tableau_,
+					public void visit(DLConceptExistentialRestiction concept) {
+						todo(new DLTableauExistentialRuleApplication(tableau_,
 								mod.getNode(), concept));
 					}
 
 					@Override
-					public void visit(DLConceptBottom concept) {
-						// clash!
+					public void visit(DLConceptUniversalRestiction concept) {
+						todo(new DLTableauUniversalRuleApplication(tableau_,
+								mod.getNode(), concept));
 					}
+
+					@Override
+					public void visit(DLConceptNegation concept) {
+						todo(new DLTableauClashRuleApplication(tableau_,
+								mod.getNode(), concept));
+					}
+
+					@Override
+					public void visit(DLConceptName concept) {
+						// potential clash rule application
+						todo(new DLTableauClashRuleApplication(tableau_,
+								mod.getNode(), new DLConceptNegation(concept)));
+					}
+
 				});
 			}
 
@@ -231,12 +231,15 @@ class DLTableauExpander {
 	}
 
 	/**
-	 * Schedule a given rule application to be performed at a latter time
+	 * Schedule a given rule application to be performed at a latter time if it
+	 * is applicable
 	 * 
-	 * @param mod
+	 * @param app
 	 */
-	private void todo(DLTableauRuleApplication<?> mod) {
-		todoRules_.add(mod);
+	private void todo(DLTableauRuleApplication<?> app) {
+		if (app.isApplicable()) {
+			todoRules_.add(app);
+		}
 	}
 
 }

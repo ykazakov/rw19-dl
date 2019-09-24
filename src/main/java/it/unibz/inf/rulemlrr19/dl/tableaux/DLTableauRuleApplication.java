@@ -88,7 +88,15 @@ abstract class DLTableauRuleApplication<C extends DLConcept> {
 	 *         performs; if the rule is not applicable, the empty stream is
 	 *         returned
 	 */
-	public abstract Stream<DLTableauModification> apply(int time);
+	public Stream<DLTableauModification> apply(int time) {
+		return isApplicable() ? getModifications(time) : Stream.empty();
+	}
+
+	/**
+	 * @param time
+	 * @return the tableau modifications performed by this rule application
+	 */
+	abstract Stream<DLTableauModification> getModifications(int time);
 
 	public abstract void accept(Visitor visitor);
 

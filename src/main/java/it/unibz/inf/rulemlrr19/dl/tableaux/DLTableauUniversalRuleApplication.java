@@ -28,12 +28,8 @@ class DLTableauUniversalRuleApplication
 	}
 
 	@Override
-	public Stream<DLTableauModification> apply(int time) {
-		if (!isApplicable()) {
-			return Stream.empty();
-		}
-		// else
-		// TODO: apply the rule
+	public Stream<DLTableauModification> getModifications(int time) {
+		// TODO: compute the tableau modifications
 		return null;
 	}
 

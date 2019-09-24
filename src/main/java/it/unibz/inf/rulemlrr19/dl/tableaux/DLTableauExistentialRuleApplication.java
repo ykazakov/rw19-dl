@@ -38,11 +38,7 @@ class DLTableauExistentialRuleApplication
 	}
 
 	@Override
-	public Stream<DLTableauModification> apply(int time) {
-		if (!isApplicable()) {
-			return Stream.empty();
-		}
-		// else
+	public Stream<DLTableauModification> getModifications(int time) {
 		int successorNode = getTableau().reserveFreshNode();
 		return Stream.of(new DLTableauNodeAddition(time, getNode() + 1),
 				new DLTableauEdgeLabelAddition(time, getNode(),

@@ -32,11 +32,7 @@ class DLTableauClashRuleApplication
 	}
 
 	@Override
-	public Stream<DLTableauModification> apply(int time) {
-		if (!isApplicable()) {
-			return Stream.empty();
-		}
-		// else
+	public Stream<DLTableauModification> getModifications(int time) {
 		return Stream.of(new DLTableauNodeLabelAddition(time, getNode(),
 				new DLConceptBottom()));
 	}
