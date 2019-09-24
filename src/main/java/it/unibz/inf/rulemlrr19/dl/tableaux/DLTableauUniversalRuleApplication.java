@@ -5,7 +5,7 @@ import java.util.stream.Stream;
 import it.unibz.inf.rulemlrr19.dl.syntax.DLConceptUniversalRestiction;
 
 /**
- * An application of the clash rule. See ⊥-Rule in Table 2 of
+ * An application of the clash rule. See ∀-Rule in Table 2 of
  * <a href="https://doi.org/10.1007/978-3-030-31423-1_1">the paper</a>.
  * 
  * @author Yevgeny Kazakov
