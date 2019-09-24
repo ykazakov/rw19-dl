@@ -12,7 +12,7 @@ import it.unibz.inf.rulemlrr19.dl.syntax.DLRole;
 
 /**
  * A tableau that represent a state of a model construction by the tableau
- * procedure. See Definition 3 of
+ * procedure. See Definition 1 of
  * <a href="https://doi.org/10.1007/978-3-030-31423-1_1">the paper</a>.
  * 
  * @author Yevgeny Kazakov
