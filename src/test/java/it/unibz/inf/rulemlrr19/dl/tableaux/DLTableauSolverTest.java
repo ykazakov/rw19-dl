@@ -48,6 +48,24 @@ public class DLTableauSolverTest {
 	}
 
 	/**
+	 * Test unsatisfiability of concept ((A ⊔ B) ⊓ (A ⊔ (¬ B)) ⊓ (((¬ A) ⊔ B) ⊓
+	 * ((¬ A) ⊔ (¬ B))))
+	 */
+	@Test
+	public void testUnsatisfiabilityABAllCombinations() {
+		DLConcept a = new DLConceptName("A");
+		DLConcept b = new DLConceptName("B");
+		DLConcept na = new DLConceptNegation(a);
+		DLConcept nb = new DLConceptNegation(b);
+		DLConcept c = new DLConceptConjunction(
+				new DLConceptConjunction(new DLConceptDisjunction(a, b),
+						new DLConceptDisjunction(a, nb)),
+				new DLConceptConjunction(new DLConceptDisjunction(na, b),
+						new DLConceptDisjunction(na, nb)));
+		assertFalse(solver.isSatisfiable(c));
+	}
+
+	/**
 	 * Test satisfiability of concept (∀ r. ⊥)
 	 */
 	@Test
