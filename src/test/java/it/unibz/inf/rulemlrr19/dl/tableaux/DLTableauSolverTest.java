@@ -116,4 +116,20 @@ public class DLTableauSolverTest {
 		assertFalse(solver.isSatisfiable(c));
 	}
 
+	/**
+	 * Test unsatisfiability of concept A ⊓ ((A ⊓ ⊥) ⊔ (¬ A)). This example
+	 * shows that when backtracking the application of ⊓-Rule, the label A must
+	 * be not removed.
+	 */
+	@Test
+	public void testUnsatisfiabilityBacktracking() {
+		DLConcept c = new DLConceptConjunction(new DLConceptName("A"),
+				new DLConceptDisjunction(
+						new DLConceptConjunction(new DLConceptName("A"),
+								new DLConceptBottom()),
+						new DLConceptNegation(new DLConceptName("A"))));
+		assertFalse(solver.isSatisfiable(c));
+
+	}
+
 }
