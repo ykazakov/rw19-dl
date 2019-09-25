@@ -3,6 +3,7 @@ package it.unibz.inf.rulemlrr19.dl.tableaux;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -19,53 +20,60 @@ import it.unibz.inf.rulemlrr19.dl.syntax.DLRoleName;
 
 public class DLTableauSolverTest {
 
+	DLSolverConceptSatisfiability solver;
+
+	@Before
+	public void initialize() {
+		solver = new DLTableauSolver();
+	}
+
 	/**
 	 * Test unsatisfiability of concept (∃ r. ⊥)
 	 */
-	@Test @Ignore
+	@Test
+	@Ignore
 	public void testUnsatisfiabilityExistsBottom() {
 		DLConcept c = new DLConceptExistentialRestiction(new DLRoleName("r"),
 				new DLConceptBottom());
-		DLSolverConceptSatisfiability solver = new DLTableauSolver();
 		assertFalse(solver.isSatisfiable(c));
 	}
 
 	/**
 	 * Test satisfiability of concept (∀ r. ⊥)
 	 */
-	@Test @Ignore
+	@Test
+	@Ignore
 	public void testSatisfiabilityForallBottom() {
 		DLConcept c = new DLConceptUniversalRestiction(new DLRoleName("r"),
 				new DLConceptBottom());
-		DLSolverConceptSatisfiability solver = new DLTableauSolver();
 		assertTrue(solver.isSatisfiable(c));
 	}
 
 	/**
 	 * Test satisfiability of concept (∃ r. A) ⊓ (∀ r. (¬ B))
 	 */
-	@Test @Ignore
+	@Test
+	@Ignore
 	public void testSatisfiabilityExistsForall() {
 		DLConcept c = new DLConceptConjunction(
 				new DLConceptExistentialRestiction(new DLRoleName("r"),
 						new DLConceptName("A")),
 				new DLConceptUniversalRestiction(new DLRoleName("r"),
 						new DLConceptNegation(new DLConceptName("B"))));
-		DLSolverConceptSatisfiability solver = new DLTableauSolver();
 		assertTrue(solver.isSatisfiable(c));
 	}
 
 	/**
 	 * Test unsatisfiability of concept (∃ r. A) ⊓ (∀ r. (¬ A))
 	 */
-	@Test @Ignore
+	@Test
+	@Ignore
 	public void testUnsatisfiabilityExistsForall() {
 		DLConcept c = new DLConceptConjunction(
 				new DLConceptExistentialRestiction(new DLRoleName("r"),
 						new DLConceptName("A")),
 				new DLConceptUniversalRestiction(new DLRoleName("r"),
 						new DLConceptNegation(new DLConceptName("A"))));
-		DLSolverConceptSatisfiability solver = new DLTableauSolver();
 		assertFalse(solver.isSatisfiable(c));
 	}
 
@@ -74,7 +82,8 @@ public class DLTableauSolverTest {
 	 * from Examples 12
 	 * <a href="https://doi.org/10.1007/978-3-030-31423-1_1">the paper</a>
 	 */
-	@Test @Ignore
+	@Test
+	@Ignore
 	public void testExample13() {
 		// Satisfiability of
 		DLConcept c = new DLConceptConjunction(
@@ -84,7 +93,6 @@ public class DLTableauSolverTest {
 						new DLConceptUniversalRestiction(new DLRoleName("r"),
 								new DLConceptNegation(new DLConceptName("A"))),
 						new DLConceptName("B")));
-		DLSolverConceptSatisfiability solver = new DLTableauSolver();
 		assertTrue(solver.isSatisfiable(c));
 	}
 
@@ -92,7 +100,8 @@ public class DLTableauSolverTest {
 	 * Test unsatisfiability of concept (∃ r. (A ⊓ B)) ⊓ ((∀ r. (¬ A)) ⊔ (∀ r.
 	 * (¬ B)))
 	 */
-	@Test @Ignore
+	@Test
+	@Ignore
 	public void testUnsatisfiabilityDeep() {
 		DLConcept c = new DLConceptConjunction(
 				new DLConceptExistentialRestiction(new DLRoleName("r"),
@@ -104,7 +113,6 @@ public class DLTableauSolverTest {
 						new DLConceptUniversalRestiction(new DLRoleName("r"),
 								new DLConceptNegation(
 										new DLConceptName("B")))));
-		DLSolverConceptSatisfiability solver = new DLTableauSolver();
 		assertFalse(solver.isSatisfiable(c));
 	}
 
