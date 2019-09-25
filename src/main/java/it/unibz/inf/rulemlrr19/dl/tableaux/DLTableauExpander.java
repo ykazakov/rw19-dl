@@ -55,7 +55,7 @@ class DLTableauExpander {
 
 	DLTableauExpander(DLTableau tableau, DLConcept concept) {
 		this.tableau_ = tableau;
-		// tableau initializaiton
+		// tableau initialization
 		int node = tableau_.reserveFreshNode();
 		apply(new DLTableauNodeAddition(time_, node));
 		apply(new DLTableauNodeLabelAddition(time_, node, concept));
@@ -65,7 +65,7 @@ class DLTableauExpander {
 	/**
 	 * Run the tableau expansion
 	 * 
-	 * @return {@code true} if the talbeau can be expanded without obtaining a
+	 * @return {@code true} if the tableau can be expanded without obtaining a
 	 *         clash and {@code false} otherwise
 	 */
 	boolean expand() {
@@ -134,12 +134,16 @@ class DLTableauExpander {
 	}
 
 	/**
-	 * Applies the given tableau modification and finds new rule applications
-	 * that can be performed to the extended tableau
+	 * Applies the given tableau modification if it changes the tableau and
+	 * finds new rule applications that can be performed to the extended tableau
 	 * 
 	 * @param mod
 	 */
 	private void apply(DLTableauModification mod) {
+		if (tableau_.isAlreadyApplied(mod)) {
+			return;
+		}
+		// else
 		tableau_.apply(mod);
 		modificationHistory_.add(mod);
 		// check if any new rules can be triggered

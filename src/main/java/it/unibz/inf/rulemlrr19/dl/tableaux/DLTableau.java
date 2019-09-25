@@ -98,6 +98,57 @@ public class DLTableau {
 		return clashCount_ > 0;
 	}
 
+	/**
+	 * A visitor checking if a the visited tableau modification can change this
+	 * tableau when applied
+	 * 
+	 * @author Yevgeny Kazakov
+	 */
+	private class DLTableauModificationApplicationChecker
+			implements DLTableauModification.Visitor {
+
+		private boolean isAlreadyApplied = false;
+
+		@Override
+		public void visit(DLTableauEdgeLabelAddition mod) {
+			isAlreadyApplied = getNodes().contains(mod.getNodeFrom())
+					&& getSuccessors(mod.getNodeFrom(), mod.getLabel())
+							.contains(mod.getNodeTo());
+		}
+
+		@Override
+		public void visit(DLTableauNodeLabelAddition mod) {
+			isAlreadyApplied = getNodes().contains(mod.getNode())
+					&& getNodeLabels(mod.getNode()).contains(mod.getLabel());
+		}
+
+		@Override
+		public void visit(DLTableauNodeAddition mod) {
+			isAlreadyApplied = getNodes().contains(mod.getNode());
+		}
+	}
+
+	/**
+	 * Checks if the given tableau modification is already applied for this
+	 * tableau, i.e., if the tableau would change after applying this
+	 * modification
+	 * 
+	 * @param mod
+	 * @return {@code true} the given tableau modification is does not need to
+	 *         be applied and {@code false} otherwise
+	 */
+	boolean isAlreadyApplied(DLTableauModification mod) {
+		DLTableauModificationApplicationChecker checker = new DLTableauModificationApplicationChecker();
+		mod.accept(checker);
+		return checker.isAlreadyApplied;
+	}
+
+	/**
+	 * Applies the given tableau modification to this tableau
+	 * 
+	 * @param mod
+	 *                the modification to be applied
+	 */
 	void apply(DLTableauModification mod) {
 		mod.accept(new DLTableauModification.Visitor() {
 
@@ -118,6 +169,13 @@ public class DLTableau {
 		});
 	}
 
+	/**
+	 * Reverts the application of the given tableau modificaiton. If a tableau
+	 * modification was not applicable, it is applied and then reverted, the
+	 * original state of the tableau will be restored.
+	 * 
+	 * @param mod
+	 */
 	void revert(DLTableauModification mod) {
 		mod.accept(new DLTableauModification.Visitor() {
 
@@ -139,11 +197,27 @@ public class DLTableau {
 
 	}
 
+	/**
+	 * Reserves a fresh node that does not appear in this tableau and was not
+	 * reserved before. Before a node can be added to this tableau, it must be
+	 * first be reserved.
+	 * 
+	 * @return a node that does not appear in this tableau
+	 */
 	int reserveFreshNode() {
 		return nextFreshNode_++;
 	}
 
-	private void addNode(int node) {
+	/**
+	 * Add the given node to the set of the nodes of this tableau. The added
+	 * node will have the empty label and will not be connected to any other
+	 * node. The added node should have been previously returned by
+	 * {@link #reserveFreshNode()}
+	 * 
+	 * @param node
+	 *                 the node that should be added to this tableau
+	 */
+	void addNode(int node) {
 		if (node >= nextFreshNode_) {
 			throw new Error("Node not reserved: " + node);
 		}
@@ -153,14 +227,32 @@ public class DLTableau {
 		}
 	}
 
-	private void removeNode(int node) {
+	/**
+	 * Remove the given node from this tableau. The given node should belong to
+	 * the set of nodes of this tableau and not connected to any other nodes.
+	 * 
+	 * @param node
+	 *                 the node that should be removed from this tableau
+	 */
+	void removeNode(int node) {
 		boolean success = nodes_.remove(node);
 		if (!success) {
 			throw new Error("Node not found: " + node);
 		}
 	}
 
-	private void addLabel(int node, DLConcept label) {
+	/**
+	 * Add a label to the given node of the tableau. The node should already
+	 * appear in this tableau, i.e., belong to the set returned by
+	 * {@link #getNodes()}.
+	 * 
+	 * @param node
+	 *                  the node to which the label should be added
+	 * @param label
+	 *                  the label that should be added to the given node; not
+	 *                  necessarily a new label
+	 */
+	void addLabel(int node, DLConcept label) {
 		checkValidNode(node);
 		Set<DLConcept> l = nodeLabels_.get(node);
 		if (l == null) {
@@ -168,25 +260,25 @@ public class DLTableau {
 			nodeLabels_.put(node, l);
 		}
 		boolean added = l.add(label);
-		if (added && label.equals(new DLConceptBottom())) {
+		if (added && label instanceof DLConceptBottom) {
 			clashCount_++;
 		}
 	}
 
-	private void removeLabel(int node, DLConcept label) {
+	void removeLabel(int node, DLConcept label) {
 		checkValidNode(node);
 		Set<DLConcept> l = nodeLabels_.get(node);
 		boolean success = (l != null) && l.remove(label);
 		if (!success) {
 			throw new Error("Label " + label + " not found in node " + node);
 		}
-		if (label.equals(new DLConceptBottom())) {
+		if (label instanceof DLConceptBottom) {
 			clashCount_--;
 		}
 
 	}
 
-	private void addLabel(int nodeFrom, DLRole label, int nodeTo) {
+	void addLabel(int nodeFrom, DLRole label, int nodeTo) {
 		checkValidNode(nodeFrom);
 		checkValidNode(nodeTo);
 		Map<DLRole, Set<Integer>> nodeSuccessorMap = successors_.get(nodeFrom);
@@ -202,7 +294,7 @@ public class DLTableau {
 		nodeSuccessors.add(nodeTo);
 	}
 
-	private void removeLabel(int nodeFrom, DLRole label, int nodeTo) {
+	void removeLabel(int nodeFrom, DLRole label, int nodeTo) {
 		checkValidNode(nodeFrom);
 		checkValidNode(nodeTo);
 		Map<DLRole, Set<Integer>> nodeSuccessorMap = successors_.get(nodeFrom);
