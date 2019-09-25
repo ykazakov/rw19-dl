@@ -31,10 +31,19 @@ public class DLTableauSolverTest {
 	 * Test unsatisfiability of concept (∃ r. ⊥)
 	 */
 	@Test
-	@Ignore
 	public void testUnsatisfiabilityExistsBottom() {
 		DLConcept c = new DLConceptExistentialRestiction(new DLRoleName("r"),
 				new DLConceptBottom());
+		assertFalse(solver.isSatisfiable(c));
+	}
+
+	/**
+	 * Test unsatisfiability of concept (A ⊓ (¬ A))
+	 */
+	@Test
+	public void testUnsatisfiabilityAAndNotA() {
+		DLConcept c = new DLConceptConjunction(new DLConceptName("A"),
+				new DLConceptNegation(new DLConceptName("A")));
 		assertFalse(solver.isSatisfiable(c));
 	}
 
