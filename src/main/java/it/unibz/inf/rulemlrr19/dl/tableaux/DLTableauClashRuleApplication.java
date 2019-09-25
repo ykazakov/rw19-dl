@@ -1,9 +1,7 @@
 package it.unibz.inf.rulemlrr19.dl.tableaux;
 
-import java.util.Set;
 import java.util.stream.Stream;
 
-import it.unibz.inf.rulemlrr19.dl.syntax.DLConcept;
 import it.unibz.inf.rulemlrr19.dl.syntax.DLConceptBottom;
 import it.unibz.inf.rulemlrr19.dl.syntax.DLConceptNegation;
 
@@ -23,12 +21,9 @@ class DLTableauClashRuleApplication
 	}
 
 	@Override
-	public boolean isApplicable() {
-		if (!super.isApplicable()) {
-			return false;
-		}
-		Set<DLConcept> l = getTableau().getNodeLabels(getNode());
-		return l.contains(getConcept().getNegated());
+	public boolean isPotentiallyApplicable() {
+		return super.isPotentiallyApplicable() && getTableau().getNodeLabels(getNode())
+				.contains(getConcept().getNegated());
 	}
 
 	@Override

@@ -1,9 +1,7 @@
 package it.unibz.inf.rulemlrr19.dl.tableaux;
 
-import java.util.Set;
 import java.util.stream.Stream;
 
-import it.unibz.inf.rulemlrr19.dl.syntax.DLConcept;
 import it.unibz.inf.rulemlrr19.dl.syntax.DLConceptConjunction;
 
 /**
@@ -26,16 +24,6 @@ class DLTableauConjunctionRuleApplication
 	DLTableauConjunctionRuleApplication(DLTableau tableau, int node,
 			DLConceptConjunction concept) {
 		super(tableau, node, concept);
-	}
-
-	@Override
-	public boolean isApplicable() {
-		if (!super.isApplicable()) {
-			return false;
-		}
-		Set<DLConcept> l = getTableau().getNodeLabels(getNode());
-		return !l.contains(getConcept().getFirstConjunct())
-				|| !l.contains(getConcept().getSecondConjunct());
 	}
 
 	@Override

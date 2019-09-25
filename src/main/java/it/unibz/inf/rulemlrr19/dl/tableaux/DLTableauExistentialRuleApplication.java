@@ -21,24 +21,18 @@ class DLTableauExistentialRuleApplication
 	}
 
 	@Override
-	public boolean isApplicable() {
-		if (!super.isApplicable()) {
-			return false;
-		}
+	public Stream<DLTableauModification> getModifications(int time) {
+		// optimization: check if the node already has a suitable successor
 		Set<Integer> successors = getTableau().getSuccessors(getNode(),
 				getConcept().getRelation());
 		for (int node : successors) {
 			Set<DLConcept> l = getTableau().getNodeLabels(node);
 			if (l.contains(getConcept().getFiller())) {
-				return false;
+				// found a successor with correct labels, nothing to do
+				return Stream.empty();
 			}
 		}
-		// else the rule is applicable
-		return true;
-	}
-
-	@Override
-	public Stream<DLTableauModification> getModifications(int time) {
+		// otherwise, create a new successor
 		int successorNode = getTableau().reserveFreshNode();
 		return Stream.of(new DLTableauNodeAddition(time, getNode() + 1),
 				new DLTableauEdgeLabelAddition(time, getNode(),

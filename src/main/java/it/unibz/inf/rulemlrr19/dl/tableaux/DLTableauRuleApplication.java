@@ -70,33 +70,29 @@ abstract class DLTableauRuleApplication<C extends DLConcept> {
 	}
 
 	/**
-	 * @return {@code true} if this rule application is applicable to the
-	 *         current state of the tableau
+	 * Checks necessary conditions for application of this rule. If the rule can
+	 * be applied to the tableau, and as a result change it, this method must
+	 * return {@code true} (but the method may also return {@code true} in other
+	 * cases). It is also required that if this method returns {@code true},
+	 * then it should also return {@code true} in all further expansions of the
+	 * tableau, i.e., after applying tableau modifications using
+	 * {@link DLTableau#apply(DLTableauModification)}
+	 * 
+	 * @return {@code true} if this rule can be potentially applied to the
+	 *         current state of the tableau and {@code false} if this rule
+	 *         cannot be applied
 	 */
-	boolean isApplicable() {
-		// check the common applicability conditions
+	boolean isPotentiallyApplicable() {
+		// check the necessary applicability conditions
 		return tableau_.getNodeLabels(node_).contains(concept_);
 	}
 
 	/**
-	 * Applies this rule to the tableau if it is applicable. The tableau is not
-	 * modified after calling this method.
-	 * 
-	 * 
 	 * @param time
-	 * @return the resulting changes in the tableau that this rule application
-	 *         performs; if the rule is not applicable, the empty stream is
-	 *         returned
+	 * @return the tableau modifications that this rule should perform, whenever
+	 *         applicable
 	 */
-	public Stream<DLTableauModification> apply(int time) {
-		return isApplicable() ? getModifications(time) : Stream.empty();
-	}
-
-	/**
-	 * @param time
-	 * @return the tableau modifications performed by this rule application
-	 */
-	abstract Stream<DLTableauModification> getModifications(int time);
+	public abstract Stream<DLTableauModification> getModifications(int time);
 
 	public abstract void accept(Visitor visitor);
 

@@ -85,7 +85,7 @@ class DLTableauExpander {
 	}
 
 	/**
-	 * Undo rule applications until the first disjunction rule
+	 * Undo rule applications until the first disjunction rule is encountered
 	 * 
 	 * @return {@code true} if backtracking can be performed and {@code false}
 	 *         otherwise
@@ -104,17 +104,37 @@ class DLTableauExpander {
 					break;
 				}
 			}
+			// check alternative rule applications
+			lastRule.accept(new DLTableauRuleApplicationDummyVisitor() {
+
+				@Override
+				public void visit(
+						DLTableauDisjunctionFirstRuleApplication app) {
+					// try the alternative rule application immediately
+					apply(new DLTableauDisjunctionSecondRuleApplication(
+							tableau_, app.getNode(), app.getConcept()));
+				}
+
+				@Override
+				public void visit(
+						DLTableauDisjunctionSecondRuleApplication app) {
+					// backtrack further, potentially need to try the first
+					// alternative again for the new choices
+					todo(new DLTableauDisjunctionFirstRuleApplication(tableau_,
+							app.getNode(), app.getConcept()));
+				}
+
+				@Override
+				public void defaultVisit(DLTableauRuleApplication<?> app) {
+					// other rules may still need to be re-applied if applicable
+					// after backtracking
+					todo(app);
+				}
+
+			});
 			if (lastRule instanceof DLTableauDisjunctionFirstRuleApplication) {
-				DLTableauDisjunctionFirstRuleApplication rule = (DLTableauDisjunctionFirstRuleApplication) lastRule;
-				// try the alternative rule application
-				DLTableauDisjunctionSecondRuleApplication alternative = new DLTableauDisjunctionSecondRuleApplication(
-						tableau_, rule.getNode(), rule.getConcept());
-				todo(alternative);
 				// done backtracking
 				return true;
-			} else {
-				// may still need to re-apply the rule if it is still applicable
-				todo(lastRule);
 			}
 		}
 		// cannot backtrack
@@ -129,7 +149,11 @@ class DLTableauExpander {
 	 * @param application
 	 */
 	private void apply(DLTableauRuleApplication<?> application) {
-		application.apply(time_++).forEach(mod -> apply(mod));
+		if (!application.isPotentiallyApplicable()) {
+			return;
+		}
+		// else
+		application.getModifications(time_++).forEach(mod -> apply(mod));
 		ruleHistory_.add(application);
 	}
 
@@ -151,8 +175,8 @@ class DLTableauExpander {
 
 			@Override
 			public void visit(DLTableauEdgeLabelAddition mod) {
-				// a universal rule potentially can be applied to universal
-				// restrictions
+				// a universal rule can be potentially applied to universal
+				// restrictions in the label of the node
 				for (DLConcept c : tableau_.getNodeLabels(mod.getNodeFrom())) {
 					// we are only interested in universal restrictions in the
 					// label
@@ -193,7 +217,7 @@ class DLTableauExpander {
 
 					@Override
 					public void visit(DLConceptDisjunction concept) {
-						// try first expansion
+						// try the first disjunct
 						todo(new DLTableauDisjunctionFirstRuleApplication(
 								tableau_, mod.getNode(), concept));
 					}
@@ -241,7 +265,7 @@ class DLTableauExpander {
 	 * @param app
 	 */
 	private void todo(DLTableauRuleApplication<?> app) {
-		if (app.isApplicable()) {
+		if (app.isPotentiallyApplicable()) {
 			todoRules_.add(app);
 		}
 	}

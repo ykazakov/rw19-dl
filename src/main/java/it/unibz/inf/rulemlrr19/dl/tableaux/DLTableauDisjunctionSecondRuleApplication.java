@@ -1,9 +1,7 @@
 package it.unibz.inf.rulemlrr19.dl.tableaux;
 
-import java.util.Set;
 import java.util.stream.Stream;
 
-import it.unibz.inf.rulemlrr19.dl.syntax.DLConcept;
 import it.unibz.inf.rulemlrr19.dl.syntax.DLConceptDisjunction;
 
 /**
@@ -19,16 +17,6 @@ class DLTableauDisjunctionSecondRuleApplication
 	DLTableauDisjunctionSecondRuleApplication(DLTableau tableau, int node,
 			DLConceptDisjunction disjunction) {
 		super(tableau, node, disjunction);
-	}
-
-	@Override
-	public boolean isApplicable() {
-		if (!super.isApplicable()) {
-			return false;
-		}
-		Set<DLConcept> l = getTableau().getNodeLabels(getNode());
-		return !l.contains(getConcept().getFirstDisjunct())
-				&& !l.contains(getConcept().getSecondDisjunct());
 	}
 
 	@Override

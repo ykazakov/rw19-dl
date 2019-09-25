@@ -19,15 +19,6 @@ class DLTableauUniversalRuleApplication
 	}
 
 	@Override
-	public boolean isApplicable() {
-		if (!super.isApplicable()) {
-			return false;
-		}
-		// TODO: check if the rule is applicable
-		return false;
-	}
-
-	@Override
 	public Stream<DLTableauModification> getModifications(int time) {
 		// TODO: compute the tableau modifications
 		return null;
