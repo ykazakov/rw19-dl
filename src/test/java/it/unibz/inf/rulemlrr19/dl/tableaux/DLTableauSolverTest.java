@@ -48,6 +48,34 @@ public class DLTableauSolverTest {
 	}
 
 	/**
+	 * Test unsatisfiability of concept ((A ⊓ B) ⊓ (¬ A ⊔ ¬ B))
+	 */
+	@Test
+	public void testUnsatisfiabilityAandBandNotAorNotB() {
+		DLConcept c = new DLConceptConjunction(
+				new DLConceptConjunction(new DLConceptName("A"),
+						new DLConceptName("B")),
+				new DLConceptDisjunction(
+						new DLConceptNegation(new DLConceptName("A")),
+						new DLConceptNegation(new DLConceptName("B"))));
+		assertFalse(solver.isSatisfiable(c));
+	}
+
+	/**
+	 * Test satisfiability of concept ((A ⊔ B) ⊓ (¬ A ⊔ ¬ B))
+	 */
+	@Test
+	public void testSatisfiabilityAorBandNotAorNotB() {
+		DLConcept c = new DLConceptConjunction(
+				new DLConceptDisjunction(new DLConceptName("A"),
+						new DLConceptName("B")),
+				new DLConceptDisjunction(
+						new DLConceptNegation(new DLConceptName("A")),
+						new DLConceptNegation(new DLConceptName("B"))));
+		assertTrue(solver.isSatisfiable(c));
+	}
+
+	/**
 	 * Test unsatisfiability of concept ((A ⊔ B) ⊓ (A ⊔ (¬ B)) ⊓ (((¬ A) ⊔ B) ⊓
 	 * ((¬ A) ⊔ (¬ B))))
 	 */
