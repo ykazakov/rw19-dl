@@ -4,11 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import it.unibz.inf.rulemlrr19.dl.syntax.DLConceptName;
-import it.unibz.inf.rulemlrr19.dl.syntax.DLIndividual;
-import it.unibz.inf.rulemlrr19.dl.syntax.DLRoleName;
-import it.unibz.inf.rulemlrr19.dl.syntax.DLSignature;
-
 public class DLSignatureTest {
 
 	@Test

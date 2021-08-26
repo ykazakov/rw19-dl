@@ -4,19 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import it.unibz.inf.rulemlrr19.dl.syntax.DLConceptAssertion;
-import it.unibz.inf.rulemlrr19.dl.syntax.DLConceptDisjunction;
-import it.unibz.inf.rulemlrr19.dl.syntax.DLConceptEquivalence;
-import it.unibz.inf.rulemlrr19.dl.syntax.DLConceptExistentialRestiction;
-import it.unibz.inf.rulemlrr19.dl.syntax.DLConceptInclusion;
-import it.unibz.inf.rulemlrr19.dl.syntax.DLConceptName;
-import it.unibz.inf.rulemlrr19.dl.syntax.DLConceptTop;
-import it.unibz.inf.rulemlrr19.dl.syntax.DLIndividual;
-import it.unibz.inf.rulemlrr19.dl.syntax.DLOntology;
-import it.unibz.inf.rulemlrr19.dl.syntax.DLRoleAssertion;
-import it.unibz.inf.rulemlrr19.dl.syntax.DLRoleName;
-import it.unibz.inf.rulemlrr19.dl.syntax.DLSignature;
-
 public class DLOntologyTest {
 
 	/**
